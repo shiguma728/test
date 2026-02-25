@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clark Signage - V3 SMASH</title>
+    <!-- Google Fonts for Smash Vibe -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <!-- Background overlay for dynamic feels -->
+    <div class="bg-speedlines"></div>
+
+    <div id="signage-container">
+        <!-- Top Banner -->
+        <header id="header">
+            <h1 class="logo">CLARK<span>.</span>NETWORK</h1>
+            <div id="top-message">
+                <div class="message-content" id="top-message-text">クラーク国際の最新ニュースを配信中</div>
+            </div>
+        </header>
+
+        <!-- Main Arena (Card Grid) -->
+        <main id="card-arena">
+            <!-- Cards will be injected here by JS -->
+        </main>
+    </div>
+
+    <!-- Clock -->
+    <div id="clock-container">
+        <span id="current-time">00:00:00</span>
+    </div>
+
+    <!-- Main Logic -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
