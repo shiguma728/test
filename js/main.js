@@ -1,4 +1,4 @@
-// Clark Signage - V3.4 SMASH VIBE (Responsive Cards & Clock)
+// Clark Signage - V4 Map & Card Fusion
 
 const targetSlugs = [
     'tokyo-tokyo', 'tokyo-ikebukuro', 'tokyo-next_akihabara', 'tokyo-next_tokyo', 'tokyo-smart_tokyo',
@@ -16,35 +16,57 @@ const campusNames = {
     'chiba-chiba': '千葉', 'chiba-kashiwa': '柏', 'chiba-smart_chiba': 'SMART千葉'
 };
 
+const campusData = {
+    'tokyo-tokyo': { lat: 35.7133, lon: 139.7046 },
+    'tokyo-ikebukuro': { lat: 35.7295, lon: 139.7109 },
+    'tokyo-next_akihabara': { lat: 35.6983, lon: 139.7731 },
+    'tokyo-next_tokyo': { lat: 35.6895, lon: 139.6917 },
+    'tokyo-smart_tokyo': { lat: 35.7000, lon: 139.7700 },
+    'kanagawa-yokohama': { lat: 35.4658, lon: 139.6223 },
+    'kanagawa-yokohamaaoba': { lat: 35.5529, lon: 139.5391 },
+    'kanagawa-atsugi': { lat: 35.4431, lon: 139.3625 },
+    'kanagawa-smart_yokohama': { lat: 35.4600, lon: 139.6200 },
+    'saitama-saitama': { lat: 35.8617, lon: 139.6455 },
+    'saitama-tokorozawa': { lat: 35.7865, lon: 139.4682 },
+    'saitama-smart_saitama': { lat: 35.8600, lon: 139.6400 },
+    'chiba-chiba': { lat: 35.6130, lon: 140.1114 },
+    'chiba-kashiwa': { lat: 35.8623, lon: 139.9712 },
+    'chiba-smart_chiba': { lat: 35.6100, lon: 140.1100 }
+};
+
+let map;
+let markers = {};
 let postQueue = [];
 let currentPostIndex = 0;
 let lastShownCampusSlug = "";
 
 const arena = document.getElementById('card-arena');
-let MAX_CARDS = 4; // 動的に変更するためletに変更
+let MAX_CARDS = 1; // 常に1枚表示（左半分の単一カードレイアウト）
 
-// 画面幅に応じて表示するカードの最大数を計算
-function calculateMaxCards() {
-    const width = window.innerWidth;
-    if (width > 1600) return 5;
-    if (width > 1200) return 4;
-    if (width > 800) return 3;
-    if (width > 500) return 2;
-    return 1;
+function createCustomIcon(isActive) {
+    return L.divIcon({
+        className: 'custom-leaflet-icon',
+        html: `<div class="campus-marker ${isActive ? 'active' : ''}"></div>`,
+        iconSize: [14, 14],
+        iconAnchor: [7, 7]
+    });
 }
 
-// リサイズ時にMAX_CARDSを更新し、多すぎるカードがあれば即座に削除する
-window.addEventListener('resize', () => {
-    MAX_CARDS = calculateMaxCards();
+function initMap(lat, lon) {
+    map = L.map('map', { zoomControl: false }).setView([lat, lon], 13);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        subdomains: 'abcd',
+        maxZoom: 20
+    }).addTo(map);
 
-    // 画面が狭くなり、現在の表示枚数がMAXを上回った場合は古いものをサクッと消す
-    while (arena.children.length > MAX_CARDS) {
-        arena.removeChild(arena.firstElementChild);
+    for (const [slug, data] of Object.entries(campusData)) {
+        const marker = L.marker([data.lat, data.lon], {
+            icon: createCustomIcon(false)
+        }).addTo(map);
+        markers[slug] = marker;
     }
-});
-
-// 初期計算
-MAX_CARDS = calculateMaxCards();
+}
 
 async function fetchClarkData() {
     try {
@@ -122,8 +144,38 @@ async function triggerNextEvent() {
 
     if (currentPostIndex === 0) fetchClarkData();
 
+    // マップ連動アニメーション
+    if (campusData[post.slug] && markers[post.slug]) {
+        // すべてのハイライトを解除
+        Object.values(markers).forEach(m => {
+            m.setIcon(createCustomIcon(false));
+        });
+
+        // 一度カメラを引く（ズームアウト）
+        map.setZoom(9, { animate: true, duration: 1.0 });
+
+        // 引いた後、次のキャンパスへ急降下（flyToしてズームイン）
+        setTimeout(() => {
+            // 当該キャンパスのマーカーをハイライト
+            const currentMarker = markers[post.slug];
+            currentMarker.setIcon(createCustomIcon(true));
+
+            map.flyTo([campusData[post.slug].lat, campusData[post.slug].lon], 13, { animate: true, duration: 2.5 });
+        }, 1200);
+    }
+
     const card = createCardDOM(post);
     arena.appendChild(card);
+
+    // トップメッセージを更新（日付を表示）
+    const msgEl = document.getElementById("top-message-text");
+    if (msgEl) {
+        const d = new Date(post.date);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        msgEl.innerText = `${yyyy}.${mm}.${dd}`;
+    }
 
     if (arena.children.length > MAX_CARDS) {
         const oldest = arena.firstElementChild;
@@ -137,7 +189,6 @@ async function triggerNextEvent() {
     }
 }
 
-// Clock logic
 function updateClock() {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
@@ -155,25 +206,44 @@ updateClock();
 // Start sequence
 setTimeout(() => {
     fetchClarkData().then(() => {
-        let initialFill = setInterval(() => {
-            if (arena.children.length < MAX_CARDS && postQueue.length > 0) {
-                let post = postQueue[currentPostIndex];
+        if (postQueue.length > 0) {
+            let post = postQueue[currentPostIndex];
 
-                let attempts = 0;
-                while (post.slug === lastShownCampusSlug && attempts < 10) {
-                    currentPostIndex = (currentPostIndex + 1) % postQueue.length;
-                    post = postQueue[currentPostIndex];
-                    attempts++;
-                }
-
-                lastShownCampusSlug = post.slug;
+            let attempts = 0;
+            while (post.slug === lastShownCampusSlug && attempts < 10) {
                 currentPostIndex = (currentPostIndex + 1) % postQueue.length;
-
-                arena.appendChild(createCardDOM(post));
-            } else {
-                clearInterval(initialFill);
-                setInterval(triggerNextEvent, 5000);
+                post = postQueue[currentPostIndex];
+                attempts++;
             }
-        }, 400);
+
+            lastShownCampusSlug = post.slug;
+            currentPostIndex = (currentPostIndex + 1) % postQueue.length;
+
+            // 最初の記事の座標をベースにマップを初期化
+            const initialLat = campusData[post.slug] ? campusData[post.slug].lat : 35.68;
+            const initialLon = campusData[post.slug] ? campusData[post.slug].lon : 139.75;
+            initMap(initialLat, initialLon);
+
+            // 初回マーカーハイライト
+            if (campusData[post.slug] && markers[post.slug]) {
+                const currentMarker = markers[post.slug];
+                currentMarker.setIcon(createCustomIcon(true));
+            }
+
+            // 初回トップメッセージ更新（日付を表示）
+            const msgEl = document.getElementById("top-message-text");
+            if (msgEl) {
+                const d = new Date(post.date);
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                msgEl.innerText = `${yyyy}.${mm}.${dd}`;
+            }
+
+            arena.appendChild(createCardDOM(post));
+
+            // 表示間隔を大幅に延長（15秒ごとに次の記事へ）
+            setInterval(triggerNextEvent, 15000);
+        }
     });
 }, 500);

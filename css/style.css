@@ -25,20 +25,57 @@ html {
     position: relative;
 }
 
+/* Map Layer (V4.1) */
+#map {
+    position: absolute;
+    top: 0;
+    left: 50vw;
+    width: 50vw;
+    height: 100vh;
+    z-index: 0;
+    box-shadow: -15px 0 30px rgba(0, 0, 0, 0.6);
+}
+
+/* Custom Leaflet Marker (V4.4) */
+.custom-leaflet-icon {
+    background: transparent;
+    border: none;
+}
+
+.campus-marker {
+    width: 14px;
+    height: 14px;
+    background-color: var(--brand-blue);
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.campus-marker.active {
+    background-color: #e60012;
+    transform: scale(1.5);
+    box-shadow: 0 0 15px #e60012;
+    z-index: 1000 !important;
+}
+
 /* Speedlines Background */
 .bg-speedlines {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    width: 50vw;
+    height: 100vh;
     background: repeating-linear-gradient(45deg,
             rgba(0, 90, 156, 0.05) 0px,
             rgba(0, 90, 156, 0.05) 10px,
             transparent 10px,
             transparent 20px);
-    z-index: -1;
+    z-index: 1;
+    /* Overlay on map */
     animation: slide-bg 30s linear infinite;
+    pointer-events: none;
+    /* Allow map interaction */
 }
 
 @keyframes slide-bg {
@@ -51,13 +88,23 @@ html {
     }
 }
 
+/* Foreground Container */
 #signage-container {
-    width: 100vw;
+    width: 50vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
     padding: 20px;
     gap: 20px;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Inner elements should receive pointer events */
+#header,
+#card-arena,
+#clock-container {
+    pointer-events: auto;
 }
 
 /* Header */
@@ -95,10 +142,13 @@ html {
 }
 
 .message-content {
-    font-size: 1.5rem;
+    font-size: clamp(1rem, 2vw, 1.5rem);
     font-weight: 900;
     font-style: italic;
     color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Clock */
@@ -123,67 +173,52 @@ html {
     -webkit-backdrop-filter: blur(5px);
 }
 
-/* Card Arena Grid (Horizontal Carousel) */
+/* Card Arena Grid (Single Card Left layout) */
 #card-arena {
-    flex: 1;
     display: flex;
-    flex-wrap: nowrap;
-    gap: 20px;
-    padding: 10px;
-    align-items: stretch;
-    overflow: hidden;
-    /* Cards will slide inside this container */
+    /* keep flex for general fallback, but children are absolute */
+    width: 100%;
+    flex: 1;
+    position: relative;
+    perspective: 1000px;
 }
 
-/* スマッシュカードの幅をメディアクエリで可変にするための変数定義（JSで枚数を決めるがCSSでも整合性を取る） */
+/* 1枚構成のため、メディアクエリによる幅変更は削除・無効化 */
 :root {
-    --card-basis: calc(100% / 5 - 16px);
-    /* Default for 5 cards: 5 gaps of 20px / 5 = 16px offset approx */
-}
-
-@media (max-width: 1600px) {
-    :root {
-        --card-basis: calc(100% / 4 - 15px);
-    }
-}
-
-@media (max-width: 1200px) {
-    :root {
-        --card-basis: calc(100% / 3 - 13.3px);
-    }
-}
-
-@media (max-width: 800px) {
-    :root {
-        --card-basis: calc(100% / 2 - 10px);
-    }
-}
-
-@media (max-width: 500px) {
-    :root {
-        --card-basis: calc(100% - 0px);
-    }
+    --card-basis: 100%;
 }
 
 /* Smash Card */
 .smash-card {
     background: #ffffff;
     color: var(--text-dark);
-    height: 420px;
-    flex: 0 0 var(--card-basis);
+    width: 90%;
+    height: 75vh;
+    position: absolute;
+    left: 5%;
+    /* 左エリアの5%マージン */
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    /* 縦方向中央揃え */
     display: flex;
     flex-direction: column;
-    position: relative;
-    clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
+    /* 欠けすぎないようにカット幅を 3% に調整するか、あるいは overflow: hidden による内包要素のカットを防ぐ丸みをつける */
+    clip-path: polygon(3% 0, 100% 0, 100% 97%, 97% 100%, 0 100%, 0 3%);
     box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.15);
     border: 4px solid var(--brand-light-blue);
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out, margin-left 0.5s ease-in-out;
-    animation: slide-in-right 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+    /* 内部の要素が clip-path の外にはみ出て見えなくなるのを防ぐためにパディングを調整 */
+    padding: 10px;
+    transition: none;
+    /* アニメーションで制御するためtransitionは削除 */
+    /* 古いカードが消える時間（0.5s）だけ待ってからスライドインを開始する（bothで待機中もopacity:0を維持） */
+    animation: slide-in-left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s both;
 }
 
-@keyframes slide-in-right {
+/* Animations */
+@keyframes slide-in-left {
     0% {
-        transform: translateX(50px);
+        transform: translateX(-50vw);
         opacity: 0;
     }
 
@@ -194,8 +229,20 @@ html {
 }
 
 .smash-card.exit {
-    transform: translateX(-50px) scale(0.9);
-    opacity: 0;
+    /* 前のカードは待機時間なしで即座に左に退場する */
+    animation: exit-left 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards !important;
+}
+
+@keyframes exit-left {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(-50vw);
+        opacity: 0;
+    }
 }
 
 /* リンク付きカード全体のラッパー */
@@ -226,8 +273,7 @@ html {
 
 .card-thumb-container {
     width: 100%;
-    height: 180px;
-    background: #eef2f5;
+    height: 250px;
     overflow: hidden;
     position: relative;
     border-bottom: 4px solid var(--brand-light-blue);
