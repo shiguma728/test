@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clark Signage - V3 SMASH</title>
+    <!-- Google Fonts for Smash Vibe -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:ital,wght@0,400;0,700;0,900;1,900&display=swap"
+        rel="stylesheet">
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <!-- Map Container -->
+    <div id="map"></div>
+
+    <!-- Background overlay for dynamic feels -->
+    <div class="bg-speedlines"></div>
+
+    <div id="signage-container">
+        <!-- Top Banner -->
+        <header id="header">
+            <h1 class="logo">CLARK<span>.</span>NETWORK</h1>
+            <div id="top-message">
+                <div class="message-content" id="top-message-text"></div>
+            </div>
+        </header>
+
+        <!-- Main Arena (Card Grid) -->
+        <main id="card-arena">
+            <!-- Cards will be injected here by JS -->
+        </main>
+    </div>
+
+    <!-- Clock -->
+    <div id="clock-container">
+        <span id="current-time">00:00:00</span>
+    </div>
+
+    <!-- Main Logic -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
