@@ -190,7 +190,8 @@ html {
 
 /* Smash Card */
 .smash-card {
-    background: #ffffff;
+    background: #ffffff !important;
+    /* カード背景を完全な不透明の白に固定 */
     color: var(--text-dark);
     width: 90%;
     height: 75vh;
@@ -281,11 +282,10 @@ html {
 
 .card-thumb-container {
     width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    /* ウィンドウ幅に合わせて高さも自動計算されるよう16:9で固定 */
-    max-height: 40vh;
-    /* 極端に画面が縦長になった時用に上限を設ける */
+    /* flexbox環境下でaspect-ratioが崩れるバグを避けるためpaddingハックによる16:9を実装 */
+    height: 0;
+    padding-top: 56.25%;
+    /* 16:9 Aspect Ratio */
     background: #eef2f5;
     overflow: hidden;
     position: relative;
@@ -293,6 +293,9 @@ html {
 }
 
 .card-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: contain;
