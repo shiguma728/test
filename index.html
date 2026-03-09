@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【科学と人間生活】1年間のまとめレポート</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ===============================
+       ヘッダー (進捗インジケーター)
+       =============================== -->
+    <header class="app-header no-print">
+        <h1>科学と人間生活 レポート作成ツール</h1>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="step-indicators">
+            <span class="step-dot active" data-step="1">1.基本情報</span>
+            <span class="step-dot" data-step="2">2.テーマ</span>
+            <span class="step-dot" data-step="3">3.学習内容</span>
+            <span class="step-dot" data-step="4">4.生活との関わり</span>
+            <span class="step-dot" data-step="5">5.自分の考え</span>
+        </div>
+    </header>
+
+    <main class="app-container">
+        <form id="report-form" onsubmit="return false;">
+
+            <!-- ===============================
+           STEP 1: 基本情報
+           =============================== -->
+            <section class="step-section active" id="step-1">
+                <h2>ステップ1: あなたについて教えてください</h2>
+                <p class="step-description">まずはレポートを作成する人の情報を入力しましょう。</p>
+
+                <div class="input-group">
+                    <label for="student-class">クラス (例: 1年A組)</label>
+                    <input type="text" id="student-class" name="class" placeholder="1年◯組" required>
+                </div>
+                <div class="input-group">
+                    <label for="student-number">出席番号</label>
+                    <input type="number" id="student-number" name="number" placeholder="半角数字" required>
+                </div>
+                <div class="input-group">
+                    <label for="student-name">氏名</label>
+                    <input type="text" id="student-name" name="name" placeholder="山田 太郎" required>
+                </div>
+
+                <div class="button-group right">
+                    <button type="button" class="btn btn-primary next-btn" data-next="2">次へ進む</button>
+                </div>
+            </section>
+
+            <!-- ===============================
+           STEP 2: テーマ選択
+           =============================== -->
+            <section class="step-section" id="step-2">
+                <h2>ステップ2: 1年間で一番印象に残ったテーマは？</h2>
+                <p class="step-description">「科学と人間生活」で学んだ分野から、最も興味深かったものを1つ選んでください。</p>
+
+                <div class="radio-group">
+                    <label class="radio-card">
+                        <input type="radio" name="theme" value="物理（光・熱・エネルギーなど）" required>
+                        <span class="radio-content">
+                            <strong>物理分野</strong>
+                            <small>光、熱、音、エネルギー、力と運動など</small>
+                        </span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="theme" value="化学（物質・材料・プラスチックなど）">
+                        <span class="radio-content">
+                            <strong>化学分野</strong>
+                            <small>金属、プラスチック、食品の化学、衣料など</small>
+                        </span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="theme" value="生物（微生物・遺伝・生態系など）">
+                        <span class="radio-content">
+                            <strong>生物分野</strong>
+                            <small>微生物の働き、遺伝子、生態系の保全など</small>
+                        </span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="theme" value="地学（気象・宇宙・自然災害など）">
+                        <span class="radio-content">
+                            <strong>地学分野</strong>
+                            <small>気象のしくみ、宇宙、地震や火山、防災など</small>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="input-group mt-large">
+                    <label for="theme-reason">なぜそのテーマを選びましたか？（きっかけや理由）</label>
+                    <textarea id="theme-reason" name="theme-reason" rows="3" maxlength="150"
+                        placeholder="例：毎日使っているプラスチックが、実は石油からできていると知って驚いたからです。（※最大150字）" required></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label for="textbook-page">主に関連する教科書のページ</label>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span>p.</span>
+                        <input type="text" id="textbook-page" name="textbook-page" placeholder="例: 124〜128"
+                            style="width: 150px;" required>
+                    </div>
+                </div>
+
+                <div class="button-group space-between">
+                    <button type="button" class="btn btn-secondary prev-btn" data-prev="1">戻る</button>
+                    <button type="button" class="btn btn-primary next-btn" data-next="3">次へ進む</button>
+                </div>
+            </section>
+
+            <!-- ===============================
+           STEP 3: 事実の整理
+           =============================== -->
+            <section class="step-section" id="step-3">
+                <h2>ステップ3: そのテーマについて学んだ客観的な「事実」</h2>
+                <p class="step-description">授業で学んだ内容のうち、科学的な事実やデータ、法則などを具体的にまとめてみましょう。</p>
+
+                <div class="hint-box">
+                    💡 <strong>レポートの質を上げるヒント</strong><br>
+                    「〜は〜であると学んだ」「〜という法則がある」「実験では〜という結果になった」のように、自分の感想ではなく、教科書や授業で扱った**客観的な事実**を書いてみよう。
+                </div>
+
+                <div class="input-group">
+                    <textarea id="facts" name="facts" rows="6" placeholder="（入力例）
+・プラスチックは熱可塑性樹脂と熱硬化性樹脂に分けられる。
+・PETボトルはポリエチレンテレフタラートでできており、リサイクルが可能である。
+・しかし、自然界では分解されにくいため、マイクロプラスチックとして海洋を汚染している問題がある。" required></textarea>
+                    <div class="char-count"><span id="facts-count">0</span>文字</div>
+                </div>
+
+                <div class="button-group space-between">
+                    <button type="button" class="btn btn-secondary prev-btn" data-prev="2">戻る</button>
+                    <button type="button" class="btn btn-primary next-btn" data-next="4">次へ進む</button>
+                </div>
+            </section>
+
+            <!-- ===============================
+           STEP 4: 生活とのつながり
+           =============================== -->
+            <section class="step-section" id="step-4">
+                <h2>ステップ4: 私たちの「生活」とどう関わっているか？</h2>
+                <p class="step-description">ステップ3で挙げた科学技術は、私たちの身の回りでどのように役立っているでしょうか？ または、どんな問題を引き起こしているでしょうか？</p>
+
+                <div class="hint-box">
+                    💡 <strong>レポートの質を上げるヒント</strong><br>
+                    メリット（便利なところ）だけでなく、デメリット（環境問題、コスト、危険性など）の両方の視点を持てると、高校生らしい深いレポートになります！
+                </div>
+
+                <div class="input-group">
+                    <textarea id="life-connection" name="life-connection" rows="6" maxlength="250" placeholder="（入力例）
+プラスチックは軽くて丈夫で加工しやすいため、家電製品、食品の容器、医療器具など、私たちの生活のあらゆる場面で役立っている。これがない生活は考えられないほど依存している。
+一方で、使い捨てられるスピードが早く、ゴミが大量に発生するという深刻なデメリットがある。特に海に流れ出たゴミは生態系を破壊している。（※最大250字）" required></textarea>
+                    <div class="char-count"><span id="life-connection-count">0</span> / 250文字</div>
+                </div>
+
+                <div class="button-group space-between">
+                    <button type="button" class="btn btn-secondary prev-btn" data-prev="3">戻る</button>
+                    <button type="button" class="btn btn-primary next-btn" data-next="5">次へ進む</button>
+                </div>
+            </section>
+
+            <!-- ===============================
+           STEP 5: 自分の考え・まとめ
+           =============================== -->
+            <section class="step-section" id="step-5">
+                <h2>ステップ5: これからの未来、どう付き合っていくべきか？（自分の考え）</h2>
+                <p class="step-description">ここが一番重要です！ 学んだ事実と生活への影響を踏まえて、あなた自身はこれからどう行動すべきだと考えますか？</p>
+
+                <div class="hint-box">
+                    💡 <strong>レポートの質を上げるヒント</strong><br>
+                    「〜に気をつけたい」「〜していきたいと思う」という個人の感想だけでなく、「社会全体として〜というルールを作るべきだ」「新しい代替素材の開発を進めるべきだ」など、広い視野での提案を入れてみよう。
+                </div>
+
+                <div class="input-group">
+                    <textarea id="my-opinion" name="my-opinion" rows="8" maxlength="300"
+                        placeholder="（入力例）
+プラスチックの便利さは手放せないため、ただ「使わない」というのは現実的ではないと考える。重要なのは、使い捨てを減らし、正しくリサイクルする仕組みである。
+私自身は、マイボトルの持参など小さなことから始めたい。また社会全体としては、自然界で分解される生分解性プラスチックのさらなる研究と、そのコストを下げるための国の支援が必要だと考える。科学の力で生み出した問題は、これからの科学の力と私たち人間のモラルで解決していくべきだ。（※最大300字）" required></textarea>
+                    <div class="char-count"><span id="my-opinion-count">0</span> / 300文字</div>
+                </div>
+
+                <div class="button-group space-between">
+                    <button type="button" class="btn btn-secondary prev-btn" data-prev="4">戻る</button>
+                    <button type="button" class="btn btn-success" id="generate-pdf-btn">🎉 完成！レポート（PDF）を出力する</button>
+                </div>
+            </section>
+
+        </form>
+    </main>
+
+    <!-- ===============================
+       印刷用レイアウト (プレビュー)
+       ※ 通常時はCSSで display: none されています
+       =============================== -->
+    <div id="print-area">
+        <div class="print-paper">
+
+            <div class="print-header">
+                <div class="print-course">令和◯年度 「科学と人間生活」 年間まとめレポート</div>
+                <h1 class="print-title">私が注目した科学技術とその未来</h1>
+                <div class="print-student-info">
+                    <span class="print-info-box">
+                        <span class="print-info-label">年組</span>
+                        <span id="print-class"></span>
+                    </span>
+                    <span class="print-info-box">
+                        <span class="print-info-label">番号</span>
+                        <span id="print-number"></span>
+                    </span>
+                    <span class="print-info-box name-box">
+                        <span class="print-info-label">氏名</span>
+                        <span id="print-name"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="print-body">
+
+                <div class="print-row">
+                    <div class="print-section flex-1">
+                        <h2 class="print-section-title">1. 選択したテーマ</h2>
+                        <div class="print-content text-center emphasis" id="print-theme"></div>
+                    </div>
+                    <div class="print-section flex-1">
+                        <h2 class="print-section-title">関連ページ</h2>
+                        <div class="print-content text-center">教科書 p.<span id="print-textbook-page"
+                                class="emphasis"></span></div>
+                    </div>
+                </div>
+
+                <div class="print-section">
+                    <h2 class="print-section-title">2. テーマを選んだ理由・きっかけ</h2>
+                    <div class="print-content" id="print-theme-reason"></div>
+                </div>
+
+                <div class="print-section">
+                    <h2 class="print-section-title">3. 学習内容の説明（自分の言葉で）</h2>
+                    <div class="print-content" id="print-facts"></div>
+                </div>
+
+                <div class="print-section">
+                    <h2 class="print-section-title">4. 私たちの「生活」との関わり・課題</h2>
+                    <div class="print-content" id="print-life-connection"></div>
+                </div>
+
+                <div class="print-section">
+                    <h2 class="print-section-title">5. 今後の科学技術とどう付き合っていくべきか</h2>
+                    <div class="print-content" id="print-my-opinion"></div>
+                </div>
+
+            </div>
+
+            <div class="print-footer">
+                提出先: 担当教員　/　作成ツール: Science Report App
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
