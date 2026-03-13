@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【下書き】化学基礎 まとめレポート</title>
+    <style>
+        /* 印刷に特化したスタイル */
+        :root {
+            --border-color: #333;
+            --font-print: 'Hiragino Mincho ProN', 'Noto Serif JP', serif;
+            --font-gothic: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-gothic);
+            margin: 0;
+            padding: 0;
+            color: #000;
+            background-color: #fff;
+        }
+
+        .worksheet {
+            max-width: 210mm;
+            /* A4横幅 */
+            margin: 0 auto;
+            border: 2px solid var(--border-color);
+            padding: 12mm 15mm;
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 16pt;
+            letter-spacing: 2px;
+            margin: 0 0 10px 0;
+        }
+
+        .subtitle {
+            font-size: 10pt;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .student-info {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            font-size: 11pt;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .info-box {
+            border-bottom: 1px dotted var(--border-color);
+            width: 80px;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .info-box.wide {
+            width: 150px;
+        }
+
+        .section {
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 11pt;
+            font-weight: bold;
+            background-color: #e2e8f0;
+            padding: 4px 10px;
+            border-left: 4px solid var(--border-color);
+            margin: 0 0 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .char-limit {
+            font-size: 9pt;
+            font-weight: normal;
+            color: #555;
+        }
+
+        .hint {
+            font-size: 9pt;
+            color: #555;
+            margin-bottom: 5px;
+            line-height: 1.4;
+            padding-left: 5px;
+        }
+
+        /* 記述欄のグリッド（原稿用紙風の点線） */
+        .writing-area {
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-image: linear-gradient(transparent 95%, #e5e7eb 95%);
+            background-size: 100% 28px;
+            line-height: 28px;
+        }
+
+        .writing-area.small {
+            height: calc(28px * 2);
+        }
+
+        .writing-area.medium {
+            height: calc(28px * 4);
+        }
+
+        .writing-area.large {
+            height: calc(28px * 5);
+        }
+
+        .writing-area.xlarge {
+            height: calc(28px * 6);
+        }
+
+        .flex-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .flex-1 {
+            flex: 1;
+        }
+
+        .flex-2 {
+            flex: 2;
+        }
+
+        /* テーマ選択用のチェックボックス（手書き用） */
+        .theme-choices {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            border: 1px solid var(--border-color);
+            padding: 8px 15px;
+            border-radius: 4px;
+            gap: 10px;
+        }
+
+        .choice {
+            font-size: 10pt;
+        }
+
+        .checkbox {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 1px solid var(--border-color);
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .print-btn-wrapper {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .print-btn {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12pt;
+            cursor: pointer;
+        }
+
+        .footer-note {
+            font-size: 9pt;
+            text-align: right;
+            margin-top: 5px;
+            color: #666;
+        }
+
+        /* 印刷時設定 */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
+            }
+
+            .print-btn-wrapper {
+                display: none;
+            }
+
+            body {
+                background-color: #fff;
+            }
+
+            .worksheet {
+                border: none;
+                padding: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            /* 背景の罫線を強制的に印刷させる */
+            .writing-area {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .section-title {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="print-btn-wrapper">
+        <p>このページは化学基礎の「下書きワークシート」です。印刷して生徒に配布してください。</p>
+        <button class="print-btn" onclick="window.print()">このワークシートを印刷する</button>
+        <p style="margin-top: 10px;"><a href="index.html">→ 本番の入力アプリへ戻る</a></p>
+    </div>
+
+    <div class="worksheet">
+        <header>
+            <div class="subtitle">「化学基礎」 年間まとめレポート</div>
+            <h1>【下書きシート】私が注目した化学技術とその未来</h1>
+
+            <div class="student-info">
+                <div class="info-item">1年 <span class="info-box"></span> 組</div>
+                <div class="info-item"><span class="info-box"></span> 番</div>
+                <div class="info-item">氏名 <span class="info-box wide"></span></div>
+            </div>
+            <p class="hint" style="text-align: left; margin: 0;">※この用紙で考えを整理してから、Chromebook(Webアプリ)に清書して提出します。</p>
+        </header>
+
+        <main>
+            <div class="section">
+                <h2 class="section-title">1. 最も印象に残ったテーマを一つ選ぶ</h2>
+                <div class="theme-choices">
+                    <span class="choice"><span class="checkbox"></span>物質の構成（原子・結合等）</span>
+                    <span class="choice"><span class="checkbox"></span>物質の変化（mol・反応式等）</span>
+                    <span class="choice"><span class="checkbox"></span>酸と塩基（中和・pH等）</span>
+                    <span class="choice"><span class="checkbox"></span>酸化還元（電池・電気分解等）</span>
+                </div>
+            </div>
+
+            <div class="flex-row">
+                <div class="section flex-2">
+                    <h2 class="section-title">
+                        <span>2. なぜそのテーマを選びましたか？（理由・きっかけ）</span>
+                        <span class="char-limit">目安: 約100字 (最大150字)</span>
+                    </h2>
+                    <p class="hint">例：原子の構造が周期表の並び方と深く関わっていると知って面白いと思ったからです。</p>
+                    <div class="writing-area small"></div>
+                </div>
+                <div class="section flex-1">
+                    <h2 class="section-title">関連教科書ページ</h2>
+                    <div style="padding: 10px 0; font-size: 14pt;">
+                        p. <span
+                            style="display:inline-block; border-bottom: 1px solid #333; width: 80px; margin-left:10px;"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">
+                    <span>3. 学習内容の説明（記述・化学反応式など）</span>
+                    <span class="char-limit">目安: 約200字 (最大250字)</span>
+                </h2>
+                <p class="hint">教科書の丸写しではなく、「〜という仕組み」「〜という反応が起こる」等、具体的に書こう。</p>
+                <div class="writing-area medium"></div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">
+                    <span>4. 私たちの「生活」とどう関わっているか？（応用例と課題）</span>
+                    <span class="char-limit">目安: 約200字 (最大250字)</span>
+                </h2>
+                <p class="hint">便利なところ（メリット）だけでなく、環境問題やコスト・危険性などのデメリットも書くと深い内容になります。</p>
+                <div class="writing-area medium"></div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">
+                    <span>5. 化学の力を未来にどう活かすべきか？（自分の考え）</span>
+                    <span class="char-limit">目安: 約250字 (最大300字)</span>
+                </h2>
+                <p class="hint">個人の感想だけでなく、「社会として〜というルールを作るべきだ」等、広い視野での提案を入れよう。</p>
+                <div class="writing-area xlarge"></div>
+            </div>
+
+            <div class="footer-note">
+                ※入力用WebアプリURL：<span style="display:inline-block; border-bottom: 1px solid #333; width: 250px;"></span>
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>

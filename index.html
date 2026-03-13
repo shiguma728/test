@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【化学基礎】1年間のまとめレポート</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ===============================
+       ヘッダー (進捗インジケーター)
+       =============================== -->
+    <header class="app-header no-print">
+        <h1>化学基礎 レポート作成ツール</h1>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="step-indicators">
+            <span class="step-dot active" data-step="1">1.基本情報</span>
+            <span class="step-dot" data-step="2">2.テーマ</span>
+            <span class="step-dot" data-step="3">3.学習内容</span>
+            <span class="step-dot" data-step="4">4.生活との関わり</span>
+            <span class="step-dot" data-step="5">5.自分の考え</span>
+        </div>
+    </header>
+
+    <main class="app-container">
+        <form id="report-form" onsubmit="return false;">
+
+            <!-- ===============================
+           STEP 1: 基本情報
+           =============================== -->
+            <section class="step-section active" id="step-1">
+                <h2>ステップ1: あなたについて教えてください</h2>
+                <p class="step-description">まずはレポートを作成する人の情報を入力しましょう。</p>
+
+                <div class="input-group">
+                    <label for="student-class">クラス (例: 1年A組)</label>
+                    <input type="text" id="student-class" name="class" placeholder="1年◯組" required>
+                </div>
+                <div class="input-group">
+                    <label for="student-number">出席番号</label>
+                    <input type="number" id="student-number" name="number" placeholder="半角数字" required>
+                </div>
+                <div class="input-group">
+                    <label for="student-name">氏名</label>
+                    <input type="text" id="student-name" name="name" placeholder="山田 太郎" required>
+                </div>
+
+                <div class="button-group right">
+                    <button type="button" class="btn btn-primary next-btn" data-next="2">次へ進む</button>
+                </div>
+            </section>
+
+            <!-- ===============================
+           STEP 2: テーマ選択
+           =============================== -->
+            <section class="step-section" id="step-2">
+                <h2>ステップ2: 1年間で一番印象に残ったテーマは？</h2>
+                <p class="step-description">「化学基礎」で学んだ分野から、最も興味深かったものを1つ選んでください。</p>
+
+                <div class="radio-group">
+                    <label class="radio-card">
+                        <input type="radio" name="theme" value="物質の構成（原子・イオン・化学結合など）" required>
+                        <span class="radio-content">
+                            <strong>物質の構成</strong>
+                            <small>原子の構造、周期表、イオン、化学結合など</small>
+                        </span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="theme" value="物質の変化（物質量・化学反応式など）">
+                        <span class="radio-content">
+                            <strong>物質の変化</strong>
+                            <small>物質量(mol)、濃度、化学反応式と量的関係など</small>
+                        </span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="theme" value="酸と塩基の反応（中和・pHなど）">
+                        <span class="radio-content">
+                            <strong>酸と塩基</strong>
+                            <small>酸・塩基の性質、pH、中和反応、中和滴定など</small>
+                        </span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="theme" value="酸化還元反応（電池・電気分解など）">
+                        <span class="radio-content">
+                            <strong>酸化還元</strong>
+                            <small>酸化と還元、酸化数、電池、電気分解など</small>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="input-group mt-large">
+                    <label for="theme-reason">なぜそのテーマを選びましたか？（きっかけや理由）</label>
+                    <textarea id="theme-reason" name="theme-reason" rows="3" maxlength="150"
+                        placeholder="例：目に見えない原子の構造が、実は周期表の並び方と深く関わっていると知って面白いと思ったからです。（※最大150字）" required></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label for="textbook-page">主に関連する教科書のページ</label>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span>p.</span>
+                        <input type="text" id="textbook-page" name="textbook-page" placeholder="例: 80〜85"
+                            style="width: 150px;" required>
+                    </div>
+                </div>
+
+                <div class="button-group space-between">
+                    <button type="button" class="btn btn-secondary prev-btn" data-prev="1">戻る</button>
+                    <button type="button" class="btn btn-primary next-btn" data-next="3">次へ進む</button>
+                </div>
+            </section>
+
+            <!-- ===============================
+           STEP 3: 事実の整理
+           =============================== -->
+            <section class="step-section" id="step-3">
+                <h2>ステップ3: そのテーマについて学んだ客観的な「事実」</h2>
+                <p class="step-description">授業で学んだ内容のうち、化学的な事実やデータ、法則、反応式などを具体的にまとめてみましょう。</p>
+
+                <div class="hint-box">
+                    💡 <strong>レポートの質を上げるヒント</strong><br>
+                    「〜は〜であると学んだ」「〜という公式がある」「化学反応式では〜となる」のように、自分の感想ではなく、教科書や授業で扱った**客観的な事実**を書いてみよう。
+                </div>
+
+                <div class="input-group">
+                    <textarea id="facts" name="facts" rows="6" placeholder="（入力例）
+・中和反応とは、酸と塩基が反応して水と塩ができる反応である。
+・塩化水素(HCl)と水酸化ナトリウム(NaOH)の反応式は、HCl + NaOH → NaCl + H2O となる。
+・pH試験紙やベネジクト液などの指示薬を使って、物質の性質を調べることができる。" required></textarea>
+                    <div class="char-count"><span id="facts-count">0</span>文字</div>
+                </div>
+
+                <div class="button-group space-between">
+                    <button type="button" class="btn btn-secondary prev-btn" data-prev="2">戻る</button>
+                    <button type="button" class="btn btn-primary next-btn" data-next="4">次へ進む</button>
+                </div>
+            </section>
+
+            <!-- ===============================
+           STEP 4: 生活とのつながり
+           =============================== -->
+            <section class="step-section" id="step-4">
+                <h2>ステップ4: 私たちの「生活」とどう関わっているか？</h2>
+                <p class="step-description">ステップ3で挙げた化学の知識は、私たちの身の回りでどのように役立っているでしょうか？ または、どんな現象に関わっているでしょうか？</p>
+
+                <div class="hint-box">
+                    💡 <strong>レポートの質を上げるヒント</strong><br>
+                    メリット（役立っているところ）だけでなく、注意点（危険性、環境への影響など）の両方の視点を持てると、高校生らしい深いレポートになります！
+                </div>
+
+                <div class="input-group">
+                    <textarea id="life-connection" name="life-connection" rows="6" maxlength="250" placeholder="（入力例）
+中和反応の考え方は、胃酸過多のときに飲む胃薬（制酸剤）や、酸性になった土壌を石灰で改良するといった場面で応用されている。
+また、酸化還元反応は、スマートフォンや電気自動車に使われるリチウムイオン電池の仕組みそのものであり、現代社会のエネルギーインフラを支えている重要な技術である。（※最大250字）" required></textarea>
+                    <div class="char-count"><span id="life-connection-count">0</span> / 250文字</div>
+                </div>
+
+                <div class="button-group space-between">
+                    <button type="button" class="btn btn-secondary prev-btn" data-prev="3">戻る</button>
+                    <button type="button" class="btn btn-primary next-btn" data-next="5">次へ進む</button>
+                </div>
+            </section>
+
+            <!-- ===============================
+           STEP 5: 自分の考え・まとめ
+           =============================== -->
+            <section class="step-section" id="step-5">
+                <h2>ステップ5: 化学の力を未来にどう活かすべきか？（自分の考え）</h2>
+                <p class="step-description">ここが一番重要です！ 学んだ事実と生活への影響を踏まえて、あなた自身はこれからどう行動したり、社会はどうあるべきだと考えますか？</p>
+
+                <div class="hint-box">
+                    💡 <strong>レポートの質を上げるヒント</strong><br>
+                    「〜がわかってよかった」という個人の感想だけでなく、「化学の知識を活かしてSDGsの達成に貢献すべきだ」「新しい材料の開発でエネルギー問題を解決したい」など、広い視野での提案を入れてみよう。
+                </div>
+
+                <div class="input-group">
+                    <textarea id="my-opinion" name="my-opinion" rows="8" maxlength="300" placeholder="（入力例）
+化学の知識は、環境問題の解決にも大きく貢献できると感じた。例えば、中和反応を利用して工場の排水を適切に処理することは、生態系を守るために不可欠である。
+私自身は、身近な製品がどのような化学反応で作られているかに関心を持ち、科学的な視点で物事を考えられるようになりたい。また、将来は化学技術を正しく安全に利用し、持続可能な社会を作る一助になりたいと考えている。（※最大300字）"
+                        required></textarea>
+                    <div class="char-count"><span id="my-opinion-count">0</span> / 300文字</div>
+                </div>
+
+                <div class="button-group space-between">
+                    <button type="button" class="btn btn-secondary prev-btn" data-prev="4">戻る</button>
+                    <button type="button" class="btn btn-success" id="generate-pdf-btn">🎉 完成！レポート（PDF）を出力する</button>
+                </div>
+            </section>
+
+        </form>
+    </main>
+
+    <!-- ===============================
+       印刷用レイアウト (プレビュー)
+       ※ 通常時はCSSで display: none されています
+       =============================== -->
+    <div id="print-area">
+        <div class="print-paper">
+
+            <div class="print-header">
+                <div class="print-course">「化学基礎」 年間まとめレポート</div>
+                <h1 class="print-title">私が注目した化学技術とその未来</h1>
+                <div class="print-student-info">
+                    <span class="print-info-box">
+                        <span class="print-info-label">年組</span>
+                        <span id="print-class"></span>
+                    </span>
+                    <span class="print-info-box">
+                        <span class="print-info-label">番号</span>
+                        <span id="print-number"></span>
+                    </span>
+                    <span class="print-info-box name-box">
+                        <span class="print-info-label">氏名</span>
+                        <span id="print-name"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="print-body">
+
+                <div class="print-row">
+                    <div class="print-section flex-1">
+                        <h2 class="print-section-title">1. 選択したテーマ</h2>
+                        <div class="print-content text-center emphasis" id="print-theme"></div>
+                    </div>
+                    <div class="print-section flex-1">
+                        <h2 class="print-section-title">関連ページ</h2>
+                        <div class="print-content text-center">教科書 p.<span id="print-textbook-page"
+                                class="emphasis"></span></div>
+                    </div>
+                </div>
+
+                <div class="print-section">
+                    <h2 class="print-section-title">2. テーマを選んだ理由・きっかけ</h2>
+                    <div class="print-content" id="print-theme-reason"></div>
+                </div>
+
+                <div class="print-section">
+                    <h2 class="print-section-title">3. 学習内容の説明（記述・反応式など）</h2>
+                    <div class="print-content" id="print-facts"></div>
+                </div>
+
+                <div class="print-section">
+                    <h2 class="print-section-title">4. 私たちの「生活」との関わり・応用例</h2>
+                    <div class="print-content" id="print-life-connection"></div>
+                </div>
+
+                <div class="print-section">
+                    <h2 class="print-section-title">5. 化学の力を未来にどう活かすべきか</h2>
+                    <div class="print-content" id="print-my-opinion"></div>
+                </div>
+
+            </div>
+
+            <div class="print-footer">
+                提出先: 担当教員　/　作成ツール: Chemistry Report App
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
